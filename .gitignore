@@ -3,7 +3,11 @@ DerivedDataCache
 Intermediate
 Saved
 Build
+Dark_Knight
 
+
+.tmp.drivedownload
+.tmp.driveupload
 .vscode
 .vs
 .idea
