@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class IEnemyInterface;
 
 /**
  * 
@@ -20,6 +21,7 @@ class REDEMPTIONSDESCENT_API ARedemptionPlayerController : public APlayerControl
 	
 public:
 	ARedemptionPlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 	
 protected:	
 	virtual void BeginPlay() override;
@@ -35,4 +37,8 @@ private:
 	
 	
 	void Move(const FInputActionValue& InputActionValue);
+	void CursorTrace();
+	
+	TScriptInterface<IEnemyInterface> LastActor;
+	TScriptInterface<IEnemyInterface> ThisActor;
 };
