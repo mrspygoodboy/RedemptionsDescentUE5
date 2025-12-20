@@ -2,24 +2,17 @@
 
 #include "Character/RedemptionCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 ARedemptionCharacter::ARedemptionCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-void ARedemptionCharacter::BeginPlay()
-{
-	Super::BeginPlay();
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+	
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 	
 }
-
-void ARedemptionCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void ARedemptionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
