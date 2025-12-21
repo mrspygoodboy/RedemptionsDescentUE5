@@ -2,7 +2,9 @@
 
 #include "Character/RedemptionCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/RedemptionPlayerState.h"
 
 ARedemptionCharacter::ARedemptionCharacter()
 {
@@ -14,5 +16,29 @@ ARedemptionCharacter::ARedemptionCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+}
+
+[RPC]
+void ARedemptionCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 	
+	/* Init ability actor for the server */
+	ARedemptionPlayerState* RedemptionPlayerState = GetPlayerState<ARedemptionPlayerState>();
+	check(RedemptionPlayerState);
+	RedemptionPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(RedemptionPlayerState, this);
+	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
+	AttributeSet = RedemptionPlayerState->GetAttributeSet();
+}
+
+void ARedemptionCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	
+	/* Init ability actor for the client */
+	ARedemptionPlayerState* RedemptionPlayerState = GetPlayerState<ARedemptionPlayerState>();
+	check(RedemptionPlayerState);
+	RedemptionPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(RedemptionPlayerState, this);
+	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
+	AttributeSet = RedemptionPlayerState->GetAttributeSet();
 }

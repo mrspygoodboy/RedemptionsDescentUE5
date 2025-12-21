@@ -6,6 +6,8 @@
 #include "RedemptionCharacterBase.h"
 #include "RedemptionCharacter.generated.h"
 
+class ARedemptionPlayerState;
+
 UCLASS()
 class REDEMPTIONSDESCENT_API ARedemptionCharacter : public ARedemptionCharacterBase
 {
@@ -13,5 +15,10 @@ class REDEMPTIONSDESCENT_API ARedemptionCharacter : public ARedemptionCharacterB
 
 public:
 	ARedemptionCharacter();
+	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void OnRep_PlayerState() override;
+	
+private:
 
 };

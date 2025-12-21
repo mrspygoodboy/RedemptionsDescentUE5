@@ -11,6 +11,16 @@ ARedemptionCharacterBase::ARedemptionCharacterBase()
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+UAbilitySystemComponent* ARedemptionCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+UAttributeSet* ARedemptionCharacterBase::GetAttributeSet() const
+{
+	return AttributeSet;
+}
+
 void ARedemptionCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

@@ -7,6 +7,9 @@
 #include "Interaction/EnemyInterface.h"
 #include "RedemptionEnemy.generated.h"
 
+class UAbilitySystemComponent;
+class UAttributeSet;
+
 /**
  * 
  */
@@ -15,6 +18,8 @@ class REDEMPTIONSDESCENT_API ARedemptionEnemy : public ARedemptionCharacterBase,
 {
 	GENERATED_BODY()
 	ARedemptionEnemy();
+protected:
+	virtual void BeginPlay() override;
 	
 public:
 	virtual void HighlightActor() override;
