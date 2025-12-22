@@ -18,7 +18,6 @@ ARedemptionCharacter::ARedemptionCharacter()
 	bUseControllerRotationRoll = false;
 }
 
-[RPC]
 void ARedemptionCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
