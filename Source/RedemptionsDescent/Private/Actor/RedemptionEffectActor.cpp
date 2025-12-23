@@ -8,7 +8,6 @@
 #include "AbilitySystem/RedemptionAttributeSet.h"
 #include "Components/SphereComponent.h"
 
-// Sets default values
 ARedemptionEffectActor::ARedemptionEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -23,7 +22,7 @@ void ARedemptionEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// TODO: Change this to apply a GameplayEffect, for now using const_cast
-	 if (IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor))
+	 if (const IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor))
 	 {
 		 const URedemptionAttributeSet* RedemptionAttributeSet = Cast<URedemptionAttributeSet>
 	 	(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(URedemptionAttributeSet::StaticClass()));
