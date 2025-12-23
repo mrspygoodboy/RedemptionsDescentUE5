@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/RedemptionPlayerState.h"
+#include "UI/HUD/RedemptionHUD.h"
 
 ARedemptionCharacter::ARedemptionCharacter()
 {
@@ -18,16 +19,26 @@ ARedemptionCharacter::ARedemptionCharacter()
 	bUseControllerRotationRoll = false;
 }
 
-void ARedemptionCharacter::PossessedBy(AController* NewController)
+void ARedemptionCharacter::InitAbilityActorInfo()
 {
-	Super::PossessedBy(NewController);
-	
-	/* Init ability actor for the server */
 	ARedemptionPlayerState* RedemptionPlayerState = GetPlayerState<ARedemptionPlayerState>();
 	check(RedemptionPlayerState);
 	RedemptionPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(RedemptionPlayerState, this);
 	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
 	AttributeSet = RedemptionPlayerState->GetAttributeSet();
+	
+	ARedemptionHUD* RedemptionHUD = Cast<ARedemptionHUD>(RedemptionPlayerState->GetPlayerController()->GetHUD());
+	
+	RedemptionHUD->InitOverlay(RedemptionPlayerState->GetPlayerController(), RedemptionPlayerState, AbilitySystemComponent, AttributeSet);
+	
+}
+
+void ARedemptionCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	/* Init ability actor for the server */
+	InitAbilityActorInfo();
 }
 
 void ARedemptionCharacter::OnRep_PlayerState()
@@ -35,9 +46,5 @@ void ARedemptionCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 	
 	/* Init ability actor for the client */
-	ARedemptionPlayerState* RedemptionPlayerState = GetPlayerState<ARedemptionPlayerState>();
-	check(RedemptionPlayerState);
-	RedemptionPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(RedemptionPlayerState, this);
-	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
-	AttributeSet = RedemptionPlayerState->GetAttributeSet();
+	InitAbilityActorInfo();
 }

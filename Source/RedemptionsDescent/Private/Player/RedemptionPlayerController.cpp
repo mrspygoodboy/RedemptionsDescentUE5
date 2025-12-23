@@ -25,9 +25,10 @@ void ARedemptionPlayerController::BeginPlay()
 	check(RedemptionContext);
 	
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);
 	
-	Subsystem->AddMappingContext(RedemptionContext, 0);
+	if (Subsystem)
+		Subsystem->AddMappingContext(RedemptionContext, 0);
+	
 	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Hand;

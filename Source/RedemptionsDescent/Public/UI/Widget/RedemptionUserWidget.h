@@ -24,6 +24,4 @@ protected:
 	// will be set
 	UFUNCTION(BlueprintImplementableEvent)
 	void WidgetControllerSet();
-	
-	
 };

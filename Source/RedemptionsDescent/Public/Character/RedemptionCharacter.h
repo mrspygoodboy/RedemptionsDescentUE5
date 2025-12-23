@@ -15,6 +15,7 @@ class REDEMPTIONSDESCENT_API ARedemptionCharacter : public ARedemptionCharacterB
 
 public:
 	ARedemptionCharacter();
+	void InitAbilityActorInfo();
 	virtual void PossessedBy(AController* NewController) override;
 	
 	virtual void OnRep_PlayerState() override;
