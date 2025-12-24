@@ -29,6 +29,7 @@ void ARedemptionCharacter::InitAbilityActorInfo()
 	
 	ARedemptionHUD* RedemptionHUD = Cast<ARedemptionHUD>(RedemptionPlayerState->GetPlayerController()->GetHUD());
 	
+	
 	RedemptionHUD->InitOverlay(RedemptionPlayerState->GetPlayerController(), RedemptionPlayerState, AbilitySystemComponent, AttributeSet);
 	
 }

@@ -13,7 +13,7 @@ UOverlayWidgetController* ARedemptionHUD::GetOverlayWidgetController(const FWidg
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(Params);
-		
+		OverlayWidgetController->BindCallbacksToDependencies();
 		return OverlayWidgetController;
 	}
 

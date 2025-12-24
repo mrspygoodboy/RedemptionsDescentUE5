@@ -28,7 +28,8 @@ void ARedemptionEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent,
 	 	(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(URedemptionAttributeSet::StaticClass()));
 	 	
 	 	URedemptionAttributeSet* MutableAuraAttributeSet = const_cast<URedemptionAttributeSet*>(RedemptionAttributeSet);
-	 	MutableAuraAttributeSet->SetHealth(RedemptionAttributeSet->GetHealth() + 25.f);
+	 	MutableAuraAttributeSet->SetHealth(RedemptionAttributeSet->GetMana() + 25.f);
+	 	MutableAuraAttributeSet->SetMana(RedemptionAttributeSet->GetMana() - 25.f);
 	 	Destroy();
 	 }
 	 	

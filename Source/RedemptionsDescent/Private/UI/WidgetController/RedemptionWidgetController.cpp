@@ -15,3 +15,7 @@ void URedemptionWidgetController::BroadcastInitialValues()
 {
 	
 }
+
+void URedemptionWidgetController::BindCallbacksToDependencies()
+{
+}
