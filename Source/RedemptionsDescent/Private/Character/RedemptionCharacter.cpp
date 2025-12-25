@@ -27,11 +27,15 @@ void ARedemptionCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
 	AttributeSet = RedemptionPlayerState->GetAttributeSet();
 	
-	ARedemptionHUD* RedemptionHUD = Cast<ARedemptionHUD>(RedemptionPlayerState->GetPlayerController()->GetHUD());
-	
-	
-	RedemptionHUD->InitOverlay(RedemptionPlayerState->GetPlayerController(), RedemptionPlayerState, AbilitySystemComponent, AttributeSet);
-	
+	if (APlayerController* RedemptionPlayerController = Cast<APlayerController>(GetController()))
+	{
+		ARedemptionHUD* RedemptionHUD = Cast<ARedemptionHUD>(RedemptionPlayerController->GetHUD());
+		if (RedemptionHUD)
+			RedemptionHUD->InitOverlay(RedemptionPlayerController, RedemptionPlayerState, AbilitySystemComponent, AttributeSet);
+	} else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HUD is null?"));
+	}
 }
 
 void ARedemptionCharacter::PossessedBy(AController* NewController)

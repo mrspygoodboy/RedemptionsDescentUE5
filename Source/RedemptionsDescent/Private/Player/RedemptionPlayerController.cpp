@@ -61,6 +61,7 @@ void ARedemptionPlayerController::Move(const FInputActionValue& InputActionValue
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
 }
 
@@ -72,7 +73,6 @@ void ARedemptionPlayerController::CursorTrace()
 	if (!CursorHit.bBlockingHit) return;
 	
 	LastActor = ThisActor;
-	
 	ThisActor = CursorHit.GetActor();
 	
 	/*
