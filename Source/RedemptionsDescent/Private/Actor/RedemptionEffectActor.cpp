@@ -34,7 +34,14 @@ void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassO
 	
 	if (bIsInfinite && InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
+		TTuple<UAbilitySystemComponent*, uint32> TargetASCToStackCount = ActiveEffectHandles.FindOrAdd(ActiveEffectHandle,TTuple<UAbilitySystemComponent*, uint32>(TargetASC, 0));
+		TargetASCToStackCount.Value++;
+		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASCToStackCount);
+	}
+	
+	if (bDestroyOnEffectApplication)
+	{
+		Destroy();
 	}
 }
 
@@ -42,35 +49,61 @@ void ARedemptionEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		for (auto InstantGameplayEffectClass : InstantGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		}
 	}
 	
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		}
 	}
 	
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		}
 	}
 }
+
+/*
+* Remove an array of effects:* Most of the changes are pretty straight forward except the Infinite one due to the stacks.
+* What happened is to test it I had to use the FireArea effect multiple times in the same FireArea Actor,
+* but since the Handle is the same, even though I apply 2 stacks of the effect, only one is removed (since we are using a map from Handle to TargetASC).
+* To solve this I updated the Map to be from Handle to Tuple of TargetASC and Stack count to remove.
+* This solves the issue...
+ */
 
 void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		for (auto GameplayEffectClass : InstantGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, GameplayEffectClass);
+		}
 	}
 	
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		}
 	}
 	
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		}
 	}
 	
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
@@ -82,15 +115,13 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 		
 		for (auto HandlePair : ActiveEffectHandles)
 		{
-			if (TargetASC == HandlePair.Value)
+			if (TargetASC == HandlePair.Value.Key)
 			{
 				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, 1);
+				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, HandlePair.Value.Value);
 				HandlesToRemove.Add(HandlePair.Key);
 			}
-		} 
-		for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
-		{
-			ActiveEffectHandles.FindAndRemoveChecked(Handle);
 		}
 	}
 }
+	

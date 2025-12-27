@@ -8,8 +8,6 @@
 #include "RedemptionEffectActor.generated.h"
 
 class UAbilitySystemComponent;
-struct FActiveGameplayEffectHandle;
-struct FActiveGameplayEffect;
 class UGameplayEffect;
 
 UENUM(BlueprintType)
@@ -49,22 +47,25 @@ protected:
 	void OnEndOverlap(AActor* TargetActor);
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
+	bool bDestroyOnEffectApplication = false;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	bool bDestroyOnEffectRemoval = false;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InstantGameplayEffectClasses;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	EEffectApplicationPolicy InstantEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> DurationGameplayEffectClasses;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	EEffectApplicationPolicy DurationEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InfiniteGameplayEffectClasses;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	EEffectApplicationPolicy InfiniteEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
@@ -72,6 +73,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
 	
-	UPROPERTY()
-	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
+	
+	
+	TMap<FActiveGameplayEffectHandle, TTuple<UAbilitySystemComponent*, uint32>> ActiveEffectHandles;
 };

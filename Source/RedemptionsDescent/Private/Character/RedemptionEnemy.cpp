@@ -6,8 +6,6 @@
 #include "AbilitySystem/RedemptionAttributeSet.h"
 #include "RedemptionsDescent/RedemptionsDescent.h"
 
-
-
 ARedemptionEnemy::ARedemptionEnemy()
 {
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
@@ -17,7 +15,6 @@ ARedemptionEnemy::ARedemptionEnemy()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	AttributeSet = CreateDefaultSubobject<URedemptionAttributeSet>("AttributeSet");
-	
 }
 
 void ARedemptionEnemy::BeginPlay()
@@ -25,7 +22,6 @@ void ARedemptionEnemy::BeginPlay()
 	Super::BeginPlay();
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
-
 
 void ARedemptionEnemy::HighlightActor()
 {
