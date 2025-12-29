@@ -24,7 +24,7 @@ struct FEffectProperties
 	FEffectProperties() {}
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayEffectContextHandle EffectContext;
+	FGameplayEffectContextHandle EffectContextHandle;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilitySystemComponent> SourceASC = nullptr;
@@ -62,9 +62,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
-	void SetEffectProperties(const struct FGameplayEffectModCallbackData& Data);
-	
-	FEffectProperties EffectProperties;
 	
 	
 	/* -- Health & MaxHealth -- */
@@ -99,5 +96,8 @@ public:
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 	/* -- end of Mana & MaxMana -- */
+	
+private:
+	void SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props);
 	
 };

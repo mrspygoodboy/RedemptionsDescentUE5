@@ -50,43 +50,8 @@ void URedemptionAttributeSet::PreAttributeChange(const FGameplayAttribute& Attri
 void URedemptionAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-	SetEffectProperties(Data);
-}
-
-void URedemptionAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallbackData& Data)
-{
-	// TODO: Must remember, source = causer of the effect, target = target of the effect (owner of the abilitysystem)
-	
-	EffectProperties.EffectContext = Data.EffectSpec.GetContext();
-	EffectProperties.SourceASC = EffectProperties.EffectContext.GetOriginalInstigatorAbilitySystemComponent(); // Instigator = who created the effect
-	
-	if (IsValid(EffectProperties.SourceASC) &&
-		EffectProperties.SourceASC->AbilityActorInfo.IsValid() &&
-		EffectProperties.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
-	{
-		EffectProperties.SourceAvatarActor = EffectProperties.SourceASC->AbilityActorInfo->AvatarActor.Get();
-		EffectProperties.SourceController = EffectProperties.SourceASC->AbilityActorInfo->PlayerController.Get();
-		
-		if (EffectProperties.SourceController == nullptr && EffectProperties.SourceAvatarActor != nullptr)
-		{
-			if (const APawn* Pawn = Cast<APawn>(EffectProperties.SourceAvatarActor))
-			{
-				EffectProperties.SourceController = Pawn->GetController();
-			}
-		}
-		if (EffectProperties.SourceController)
-		{
-			EffectProperties.SourceCharacter = Cast<ACharacter>(EffectProperties.SourceController->GetPawn());
-		}
-	}
-	
-	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
-	{
-		EffectProperties.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-		EffectProperties.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		EffectProperties.TargetCharacter = Cast<ACharacter>(EffectProperties.TargetAvatarActor);
-		EffectProperties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(EffectProperties.TargetAvatarActor);
-	}
+	FEffectProperties Props;
+	SetEffectProperties(Data, Props);
 }
 
 void URedemptionAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
@@ -107,4 +72,40 @@ void URedemptionAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) 
 void URedemptionAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URedemptionAttributeSet, MaxMana, OldMaxMana);
+}
+
+void URedemptionAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
+{
+	// TODO: Must remember, source = causer of the effect, target = target of the effect (owner of the abilitysystem)
+	
+	Props.EffectContextHandle = Data.EffectSpec.GetContext();
+	Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent(); // Instigator = who created the effect
+	
+	if (IsValid(Props.SourceASC) &&
+		Props.SourceASC->AbilityActorInfo.IsValid() &&
+		Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Props.SourceAvatarActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
+		Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
+		
+		if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr)
+		{
+			if (const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
+			{
+				Props.SourceController = Pawn->GetController();
+			}
+		}
+		if (Props.SourceController)
+		{
+			Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+		}
+	}
+	
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+		Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
+		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
+	}
 }
