@@ -10,9 +10,9 @@
 
 URedemptionAttributeSet::URedemptionAttributeSet()
 {
-	InitHealth(100.f);
+	InitHealth(10.f);
 	InitMaxHealth(100.f);
-	InitMana(50.f);
+	InitMana(5.f);
 	InitMaxMana(60.f);
 }
 

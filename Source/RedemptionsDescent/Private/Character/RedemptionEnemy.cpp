@@ -17,12 +17,6 @@ ARedemptionEnemy::ARedemptionEnemy()
 	AttributeSet = CreateDefaultSubobject<URedemptionAttributeSet>("AttributeSet");
 }
 
-void ARedemptionEnemy::BeginPlay()
-{
-	Super::BeginPlay();
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-}
-
 void ARedemptionEnemy::HighlightActor()
 {
 	bHighlighted = true;
@@ -39,4 +33,17 @@ void ARedemptionEnemy::UnHighlightActor()
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
 	UE_LOG(LogTemp, Warning, TEXT("Unhighlight Actor"));
+}
+
+void ARedemptionEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	InitAbilityActorInfo();
+	
+}
+
+
+void ARedemptionEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }

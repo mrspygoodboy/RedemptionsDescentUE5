@@ -25,7 +25,6 @@ enum class EEffectRemovalPolicy : uint8
 	DoNotRemove,
 };
 
-
 UCLASS()
 class REDEMPTIONSDESCENT_API ARedemptionEffectActor : public AActor
 {
@@ -45,12 +44,6 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* TargetActor);
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
-	bool bDestroyOnEffectApplication = false;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
-	bool bDestroyOnEffectRemoval = false;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	TArray<TSubclassOf<UGameplayEffect>> InstantGameplayEffectClasses;
@@ -73,7 +66,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
 	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
 	
-	
-	
 	TMap<FActiveGameplayEffectHandle, TTuple<UAbilitySystemComponent*, uint32>> ActiveEffectHandles;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Applied Effects")
+	float ActorLevel = 1.f;
 };

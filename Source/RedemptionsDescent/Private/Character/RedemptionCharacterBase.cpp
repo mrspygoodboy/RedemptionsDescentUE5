@@ -25,3 +25,7 @@ void ARedemptionCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void ARedemptionCharacterBase::InitAbilityActorInfo()
+{
+}

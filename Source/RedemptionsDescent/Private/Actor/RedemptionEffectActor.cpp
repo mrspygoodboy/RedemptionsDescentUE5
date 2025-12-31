@@ -5,14 +5,11 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/RedemptionAbilitySystemComponent.h"
 
-
-
 ARedemptionEffectActor::ARedemptionEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
-
 
 void ARedemptionEffectActor::BeginPlay()
 {
@@ -27,7 +24,7 @@ void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassO
 	check(GameplayEffectClass);
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.f, EffectContextHandle);
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, ActorLevel, EffectContextHandle);
 	const FActiveGameplayEffectHandle ActiveEffectHandle = TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 	
 	const bool bIsInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
@@ -38,36 +35,34 @@ void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassO
 		TargetASCToStackCount.Value++;
 		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASCToStackCount);
 	}
-	
-	if (bDestroyOnEffectApplication)
-	{
-		Destroy();
-	}
 }
 
 void ARedemptionEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto InstantGameplayEffectClass : InstantGameplayEffectClasses)
+		for (const auto InstantGameplayEffectClass : InstantGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+			UE_LOG(LogTemp, Warning, TEXT("OnOverlap Instant"));
 		}
 	}
 	
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		for (const auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+			UE_LOG(LogTemp, Warning, TEXT("OnOverlap Duration"));
 		}
 	}
 	
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		for (const auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+			UE_LOG(LogTemp, Warning, TEXT("OnOverlap Infinite"));
 		}
 	}
 }
@@ -84,7 +79,7 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		for (auto GameplayEffectClass : InstantGameplayEffectClasses)
+		for (const auto GameplayEffectClass : InstantGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, GameplayEffectClass);
 		}
@@ -92,7 +87,7 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 	
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		for (const auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
 		}
@@ -100,7 +95,7 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 	
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		for (const auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
 		{
 			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
 		}
