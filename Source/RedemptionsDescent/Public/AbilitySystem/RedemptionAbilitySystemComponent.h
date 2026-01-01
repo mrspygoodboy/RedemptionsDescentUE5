@@ -21,6 +21,4 @@ protected:
 	/* This function is bound to a delegate from UAbilitySystemComponent, called on server when effect is applied to self */
 	void EffectApplied
 	(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle EffectHandle);
-	
-	
 };
