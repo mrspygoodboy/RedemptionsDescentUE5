@@ -27,7 +27,10 @@ void ARedemptionCharacter::InitAbilityActorInfo()
 	ARedemptionPlayerState* RedemptionPlayerState = GetPlayerState<ARedemptionPlayerState>();
 	check(RedemptionPlayerState);
 	RedemptionPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(RedemptionPlayerState, this);
-	URedemptionAbilitySystemComponent* RedemptionAbilitySystemComponent = Cast<URedemptionAbilitySystemComponent>(AbilitySystemComponent);
+	
+	/* Call AbilityActorInfoSet, which is used as a notifier to bind delegates (basically at this point we know we have everything we need) */
+	Cast<URedemptionAbilitySystemComponent>(RedemptionPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+	
 	AbilitySystemComponent = RedemptionPlayerState->GetAbilitySystemComponent();
 	AttributeSet = RedemptionPlayerState->GetAttributeSet();
 	
@@ -39,10 +42,6 @@ void ARedemptionCharacter::InitAbilityActorInfo()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HUD is null?"));
 	}
-	
-	
-	
-	RedemptionAbilitySystemComponent->AbilityActorInfoSet();
 }
 
 void ARedemptionCharacter::PossessedBy(AController* NewController)

@@ -39,11 +39,11 @@ void ARedemptionEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
-	
 }
 
 
 void ARedemptionEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<URedemptionAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
