@@ -9,6 +9,11 @@
 /**
  * 
  */
+
+/* Broadcast this delegate from here and bind to it from the widget controller */
+/* Any class that binds to EffectAssetTags will receive a TagContainer */
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer /*AssetTags*/);
+
 UCLASS()
 class REDEMPTIONSDESCENT_API URedemptionAbilitySystemComponent : public UAbilitySystemComponent
 {
@@ -16,6 +21,9 @@ class REDEMPTIONSDESCENT_API URedemptionAbilitySystemComponent : public UAbility
 public:
 	/* When this function is called we know that the AbilityActorInfo has been set */
 	void AbilityActorInfoSet();
+	
+	
+	FEffectAssetTags EffectAssetTags;
 	
 protected:
 	/* This function is bound to a delegate from UAbilitySystemComponent, called on server when effect is applied to self */

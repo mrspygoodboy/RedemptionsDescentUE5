@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+#include "AbilitySystem/RedemptionAbilitySystemComponent.h"
 #include "AbilitySystem/RedemptionAttributeSet.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
@@ -29,6 +30,18 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate
 	(RedemptionAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+	
+	Cast<URedemptionAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[](const FGameplayTagContainer& AssetTags)
+		{
+			for (const FGameplayTag& Tag : AssetTags)
+			{
+				//TODO: Broadcast the tag to the widget controller?
+				const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
+		
+			}
+		} );
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

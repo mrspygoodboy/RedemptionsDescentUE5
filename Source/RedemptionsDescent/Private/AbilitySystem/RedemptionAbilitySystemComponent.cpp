@@ -14,11 +14,9 @@ void URedemptionAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* A
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
 	
-	for (const FGameplayTag& Tag : TagContainer)
-	{
-		//TODO: Broadcast the tag to the widget controller?
-		const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
-		
-	}
+	/* Any class that binds to EffectAssetTags will receive a TagContainer
+	 * The ability system component is going to broadcast the @TagContainer (AssetTags)
+	 * in response to any effect being applied to it, and it is going to send this tag container. */
+	
+	EffectAssetTags.Broadcast(TagContainer);
 }
