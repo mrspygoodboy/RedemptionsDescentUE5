@@ -9,6 +9,8 @@
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const URedemptionAttributeSet* RedemptionAttributeSet = CastChecked<URedemptionAttributeSet>(AttributeSet);
+	
+	/* broadcast attribute values when they change */
 	OnHealthChanged.Broadcast(RedemptionAttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(RedemptionAttributeSet->GetMaxHealth());
 	
@@ -18,6 +20,7 @@ void UOverlayWidgetController::BroadcastInitialValues()
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
+	/* bind callbacks functions to attributes */
 	const URedemptionAttributeSet* RedemptionAttributeSet = CastChecked<URedemptionAttributeSet>(AttributeSet);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate
 	(RedemptionAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);

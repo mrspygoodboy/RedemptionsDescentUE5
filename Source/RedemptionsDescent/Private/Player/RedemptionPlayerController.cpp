@@ -65,6 +65,7 @@ void ARedemptionPlayerController::Move(const FInputActionValue& InputActionValue
 	}
 }
 
+/* Fire a raycast from the cursor position to the world, called every frame */
 void ARedemptionPlayerController::CursorTrace()
 {
 	FHitResult CursorHit;

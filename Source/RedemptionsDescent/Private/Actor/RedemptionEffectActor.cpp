@@ -16,6 +16,7 @@ void ARedemptionEffectActor::BeginPlay()
 	Super::BeginPlay();
 }
 
+/* Applies a given effect to target, requires a gameplayeffetclass and a targetactor */
 void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
 	UAbilitySystemComponent* TargetASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
@@ -29,6 +30,7 @@ void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassO
 	
 	const bool bIsInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
 	
+	/* because infinite effects need to removed manually and we need to keep track of how many stacks there are */
 	if (bIsInfinite && InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		TTuple<UAbilitySystemComponent*, uint32> TargetASCToStackCount = ActiveEffectHandles.FindOrAdd(ActiveEffectHandle,TTuple<UAbilitySystemComponent*, uint32>(TargetASC, 0));
@@ -37,6 +39,8 @@ void ARedemptionEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassO
 	}
 }
 
+
+/* Call this on overlap from the blueprints */
 void ARedemptionEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
@@ -100,6 +104,8 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
 		}
 	}
+	
+	// Only infinite effects need to be removed manually.
 	
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{

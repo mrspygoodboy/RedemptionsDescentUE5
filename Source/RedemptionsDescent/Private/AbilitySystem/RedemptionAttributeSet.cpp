@@ -74,6 +74,7 @@ void URedemptionAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMax
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URedemptionAttributeSet, MaxMana, OldMaxMana);
 }
 
+/* Use to receive and set a ton of properties when an effect is applied */
 void URedemptionAttributeSet::SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
 {
 	// TODO: Must remember, source = causer of the effect, target = target of the effect (owner of the abilitysystem)

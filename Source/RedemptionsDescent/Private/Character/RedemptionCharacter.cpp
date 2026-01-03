@@ -44,6 +44,7 @@ void ARedemptionCharacter::InitAbilityActorInfo()
 	}
 }
 
+/* function is called when the character is possessed by the controller  */
 void ARedemptionCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
