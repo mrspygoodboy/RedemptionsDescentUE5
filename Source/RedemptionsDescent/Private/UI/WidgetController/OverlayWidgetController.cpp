@@ -10,7 +10,7 @@ void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const URedemptionAttributeSet* RedemptionAttributeSet = CastChecked<URedemptionAttributeSet>(AttributeSet);
 	
-	/* broadcast attribute values when they change */
+	/* broadcast attribute initial values */
 	OnHealthChanged.Broadcast(RedemptionAttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(RedemptionAttributeSet->GetMaxHealth());
 	
@@ -35,14 +35,15 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	(RedemptionAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 	
 	Cast<URedemptionAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[](const FGameplayTagContainer& AssetTags)
+		[this](const FGameplayTagContainer& AssetTags)
 		{
 			for (const FGameplayTag& Tag : AssetTags)
 			{
 				//TODO: Broadcast the tag to the widget controller?
 				const FString Msg = FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString());
 				GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
-		
+				
+				FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 			}
 		} );
 }
