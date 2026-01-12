@@ -106,6 +106,8 @@ void ARedemptionEffectActor::OnEndOverlap(AActor* TargetActor)
 	}
 	
 	// Only infinite effects need to be removed manually.
+	// Removal of instant and duration effects are automatically handled by GAS
+	
 	
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{

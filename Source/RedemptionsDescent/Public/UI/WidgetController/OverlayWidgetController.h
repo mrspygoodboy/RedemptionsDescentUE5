@@ -60,6 +60,7 @@ public:
 	FMessageWidgetChangedSignature MessageWidgetRowDelegate;
 	
 protected:
+	/* Assign a message widgetdata table in the blueprints to avoid nullptr crash */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;
 	
@@ -75,6 +76,7 @@ protected:
 	
 };
 
+// Template function that finds the name of the row given it's tag. Template functions have no specific type.
 template <typename T>
 T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
 {

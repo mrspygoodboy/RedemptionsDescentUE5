@@ -1,8 +1,6 @@
 // Copyright RedemptionStudios
 
-
 #include "UI/WidgetController/OverlayWidgetController.h"
-
 #include "AbilitySystem/RedemptionAbilitySystemComponent.h"
 #include "AbilitySystem/RedemptionAttributeSet.h"
 
@@ -21,6 +19,9 @@ void UOverlayWidgetController::BroadcastInitialValues()
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	/* bind callbacks functions to attributes */
+	
+	// TODO: Convert all bindings to lambda's to improve readability.
+	
 	const URedemptionAttributeSet* RedemptionAttributeSet = CastChecked<URedemptionAttributeSet>(AttributeSet);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate
 	(RedemptionAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);
@@ -34,6 +35,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate
 	(RedemptionAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 	
+	// AddLamba -> Bind to an anonymous function and execute it simulatenously, lambda's are anonymous
+	// and don't have a function name.
 	Cast<URedemptionAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
 		{
